@@ -7,6 +7,7 @@ INCLUDE := include
 
 LIBRARIES   := 
 EXECUTABLE  := client
+DEBUG_EXECUTABLE := client.debug
 
 
 all: $(BIN)/$(EXECUTABLE)
@@ -17,6 +18,11 @@ run: clean all
 
 $(BIN)/$(EXECUTABLE): $(SRC)/*.cpp
 	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) $^ -o $@ $(LIBRARIES)
+
+debug: $(BIN)/$(DEBUG_EXECUTABLE)
+
+$(BIN)/$(DEBUG_EXECUTABLE): $(SRC)/*.cpp
+	$(CXX) $(CXX_FLAGS) -g -I$(INCLUDE) $^ -o $@ $(LIBRARIES)
 
 clean:
 	-rm $(BIN)/*

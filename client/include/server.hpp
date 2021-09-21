@@ -1,7 +1,7 @@
 #include <string>
 
-struct Server
+typedef struct __server_attr
 {
-    std::string hostname;
+    std::string address;
     std::string port;
-};
+} server_attr;
