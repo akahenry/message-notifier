@@ -1,33 +1,26 @@
 #include <iostream>
 #include <string>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <netinet/in.h>
-#include <netdb.h> 
 
-#include "server.hpp"
+#include "models.hpp"
 #include "error.hpp"
-#include "packet.hpp"
+#include "socket.hpp"
+
+typedef packet_type_t message_type_t;
 
 class Client
 {
     private:
         std::string username;
         server_attr server;
-        struct sockaddr_in sockaddr;
-        int sockfd;
+        Socket socket;
 
     public:
         Client();
         Client(std::string _user, server_attr _server);
         Client(std::string _user, std::string _address, std::string _port);
 
-        error_t configure();
-        error_t finish();
-        error_t sendMessage(packet_type_t type, std::string message);
+        error_t connect();
+        error_t close();
+        error_t send(message_type_t type, std::string message);
 };
 

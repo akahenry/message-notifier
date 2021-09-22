@@ -36,7 +36,7 @@ int main(int argc, char **argv)
         client = new Client(username, hostname, port);
     }
 
-    if (client->configure())
+    if (client->connect())
     {
         std::cout << "Error configurating client. Exiting..." << std::endl;
         return ERROR_CONFIGURATION_FAILED;
@@ -46,7 +46,7 @@ int main(int argc, char **argv)
     {
         std::string input;
         std::cin >> input;
-        client->sendMessage(PACKET_TYPE_DATA, input);
+        client->send(PACKET_TYPE_DATA, input);
     }
 
     return 0;
