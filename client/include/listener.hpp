@@ -13,7 +13,7 @@ class Listener
         error_t run();
 
     public:
-        Listener();
+        Listener() = default;
         Listener(Socket _socket);
         
         error_t start();

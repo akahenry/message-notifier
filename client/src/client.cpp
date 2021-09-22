@@ -14,10 +14,14 @@ Client::Client(std::string _user, std::string _address, std::string _port) : use
 
 error_t Client::connect()
 {
-    if (this->socket.configure())
+    if (this->socket.configure(SOCKET_TYPE_CLIENT))
     {
         return ERROR_CONNECTION_SOCKET_FAILED;
     }
+
+    this->listener = Listener(this->socket);
+
+    return this->listener.start();
 }
 
 error_t Client::send(message_type_t type, std::string message)
@@ -27,5 +31,6 @@ error_t Client::send(message_type_t type, std::string message)
 
 error_t Client::close()
 {
+    this->listener.stop();
     return this->socket.finish();
 }

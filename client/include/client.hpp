@@ -1,9 +1,7 @@
 #include <iostream>
 #include <string>
 
-#include "models.hpp"
-#include "error.hpp"
-#include "socket.hpp"
+#include "listener.hpp"
 
 typedef packet_type_t message_type_t;
 
@@ -13,9 +11,10 @@ class Client
         std::string username;
         server_attr server;
         Socket socket;
+        Listener listener;
 
     public:
-        Client();
+        Client() = default;
         Client(std::string _user, server_attr _server);
         Client(std::string _user, std::string _address, std::string _port);
 
