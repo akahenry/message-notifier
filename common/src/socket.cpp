@@ -142,9 +142,14 @@ error_t Socket::receive(notification* _notification)
 
 error_t Socket::receive(packet* pkt)
 {
-    if (read(this->sockfd, pkt, sizeof(packet)) == -1)
+    int res = read(this->sockfd, pkt, sizeof(packet));
+    if (res == -1)
     {
         return ERROR_RECEIVING_MESSAGE;
+    }
+    else if (res == 0)
+    {
+        return ERROR_BROKEN_SOCKET_CONNECTION;
     }
 
     return 0;
