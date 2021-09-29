@@ -6,22 +6,52 @@ User::User(std::string _name, std::vector<User*> _following, std::vector<User*> 
 
 void User::addFollower(User* user) 
 {
+    bool found = false;
     this->mutex.lock();
-    this->followers.push_back(user);
+    for (size_t i = 0; i < this->followers.size(); i++)
+    {
+        if (this->followers[i] == user)
+        {
+            found = true;
+        }
+    }
+
+    if (!found)
+    {
+        this->followers.push_back(user);
+    }
     this->mutex.unlock();
 }
 
 void User::follow(User* user) 
 {
-    this->mutex.lock();
+    bool found = false;
     user->addFollower(this);
-    this->following.push_back(user);
+    
+    this->mutex.lock();
+    for (size_t i = 0; i < this->following.size(); i++)
+    {
+        if (this->following[i] == user)
+        {
+            found = true;
+        }
+    }
+
+    if (!found)
+    {
+        this->following.push_back(user);
+    }
     this->mutex.unlock();
 }
 
 std::string User::getName()
 {
     return this->name;
+}
+
+std::vector<User*> User::getFollowers()
+{
+    return this->followers;
 }
 
 void User::lock()
@@ -38,28 +68,31 @@ void User::addSession(Session* session)
 {
     std::cout << "DEBUG: Trying to lock user" << std::endl;
     this->mutex.lock();
+    session->id = this->sessions.size();
     this->sessions.push_back(session);
     this->mutex.unlock();
     std::cout << "DEBUG: Trying to unlock user" << std::endl;
 }
 
-bool User::removeSession(Session* session)
+void User::removeSession(Session* session)
 {
-    bool deleted = false;
-
     this->mutex.lock();
-    for (size_t i = 0; i < this->sessions.size(); i++)
-    {
-        if (this->sessions[i] == session)
-        {
-            this->sessions.erase(this->sessions.begin() + i);
-            deleted = true;
-            break;
-        }
-    }
+    this->sessions.erase(this->sessions.begin() + session->id);
+    session->finish();
     this->mutex.unlock();
+}
 
-    return deleted;
+void User::removeSession(uint16_t session_id)
+{
+    this->mutex.lock();
+    Session* session = this->sessions[session_id];
+    this->mutex.unlock();
+    this->removeSession(session);
+}
+
+std::vector<Session*> User::getSessions()
+{
+    return this->sessions;
 }
 
 int User::countSessions()

@@ -18,7 +18,7 @@ error_t Listener::run()
         {
             case ERROR_NOTIFICATION_NONE:
                 std::cout << "\n----------------------------------\n";
-                std::cout << notif._user << ": " << notif._string;
+                std::cout << notif._user << ": " << notif._string << std::endl;
                 std::cout << "----------------------------------\n";
 
                 std::cout << "> ";

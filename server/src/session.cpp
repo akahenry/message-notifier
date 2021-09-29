@@ -1,11 +1,11 @@
 #include "session.hpp"
 
-Session::Session(Socket _socket)
+Session::Session(Socket _socket, Queue* _queue)
 {
-    *this = Session(-1, _socket);
+    *this = Session(-1, _socket, _queue);
 }
 
-Session::Session(int _id, Socket _socket) : id{_id}, socket{_socket}, running{false} {}
+Session::Session(int _id, Socket _socket, Queue* _queue) : id{_id}, socket{_socket}, running{false}, queue(_queue) {}
 
 error_t Session::send(message_type_t type, void* message)
 {
@@ -56,14 +56,7 @@ error_t Session::run()
             return ERROR_RECEIVING_MESSAGE;
         }
 
-        if (pkt.type == PACKET_TYPE_DATA)
-        {
-            std::cout << "INFO: Data `" << pkt._payload << "` received from user `" <<  pkt._username << "`" << std::endl;
-        }
-        else if (pkt.type == PACKET_TYPE_CMD)
-        {
-            std::cout << "INFO: Command `" << pkt._payload << "` received from user `" <<  pkt._username << "`" << std::endl;
-        }
+        this->queue->push({(uint16_t)this->id, pkt});
     }
 
     return 0;
@@ -76,4 +69,14 @@ error_t Session::close(error_notification_t _error)
 
     this->socket.send(notif);
     return this->socket.finish();
+}
+
+error_t Session::finish()
+{
+    return this->socket.finish();
+}
+
+void Session::join()
+{
+    this->thread.join();
 }

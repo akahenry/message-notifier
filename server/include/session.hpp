@@ -5,28 +5,32 @@
 #include <functional>
 
 #include "socket.hpp"
+#include "queue.hpp"
 
 class Session
 {
     private:
-        int id;
         Socket socket;
         std::thread thread;
         bool running;
-        std::string username;
+        Queue* queue;
 
         error_t sendPacket(packet pkt);
         error_t sendNotification(notification notif);
         error_t run();
 
     public:
+        int id;
+
         Session();
-        Session(Socket _socket);
-        Session(int _id, Socket _socket);
+        Session(Socket _socket, Queue* _queue);
+        Session(int _id, Socket _socket, Queue* _queue);
 
         error_t send(message_type_t type, void* message);
         error_t listen();
         error_t close(error_notification_t _error);
+        error_t finish();
+        void join();
 };
 
 #endif

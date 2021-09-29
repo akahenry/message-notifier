@@ -6,17 +6,19 @@
 #include <mutex>
 
 #include "user.hpp"
-#include "authenticator.hpp"
+#include "queue.hpp"
+#include "pkthandler.hpp"
 
 class Server
 {
     private:
         server_attr server;
         Socket socket;
-        std::map<std::string, User*> users;
-        std::mutex users_mutex;
+        Queue* queue;
+        PacketHandler* pkt_handler;
         bool running;
 
+        auth_t auth(Socket socket);
     public:
         Server();
         Server(std::vector<User*> _users);

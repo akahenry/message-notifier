@@ -30,8 +30,10 @@ class User
         std::vector<User*> getFollowers();
         std::string getName();
         void addSession(Session* session);
-        bool removeSession(Session* session);
-        int countSessions();
+        void removeSession(Session* session);
+        void removeSession(uint16_t session_id);
+        std::vector<Session*> getSessions();
+        int countSessions();    
 };
 
 #endif

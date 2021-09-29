@@ -14,8 +14,9 @@ typedef enum __message_type_t
 
 typedef enum __packet_type_t
 {
-    PACKET_TYPE_CMD,
-    PACKET_TYPE_DATA,
+    PACKET_TYPE_CMD_FOLLOW,
+    PACKET_TYPE_CMD_SEND,
+    PACKET_TYPE_CMD_EXIT,
     PACKET_TYPE_CONNECT,
     PACKET_TYPE_CLOSE,
 } packet_type_t;
@@ -47,9 +48,21 @@ typedef struct __notification{
     uint32_t timestamp;     //Timestamp da notificação 
     uint16_t length;       //Tamanho da mensagem 
     uint16_t pending;      //Quantidade de leitores pendentes 
-    std::string _string;     //Mensagem 
-    std::string _user;      //Nome do usuário que enviou a mensagem
+    char _string[PACKET_PAYLOAD_MAX_LENGTH];     //Mensagem 
+    char _user[PACKET_USERNAME_MAX_LENGTH];      //Nome do usuário que enviou a mensagem
     error_notification_t error;
 } notification; 
+
+typedef struct _packet_item
+{
+    uint16_t session_id;
+    packet pkt;
+} packet_item;
+
+typedef struct _auth_t
+{
+    std::string username;
+    bool isValid;
+} auth_t;
 
 #endif
