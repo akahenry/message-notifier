@@ -68,3 +68,12 @@ error_t Session::run()
 
     return 0;
 }
+
+error_t Session::close(error_notification_t _error)
+{
+    notification notif;
+    notif.error = _error;
+
+    this->socket.send(notif);
+    return this->socket.finish();
+}

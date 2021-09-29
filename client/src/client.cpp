@@ -29,9 +29,9 @@ error_t Client::connect()
     return this->listener.start();
 }
 
-error_t Client::send(message_type_t type, std::string message)
+error_t Client::send(packet_type_t type, std::string message)
 {
-    return this->socket.send((packet_type_t)type, this->username, message);
+    return this->socket.send(type, this->username, message);
 }
 
 error_t Client::close()

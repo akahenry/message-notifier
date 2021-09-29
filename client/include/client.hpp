@@ -6,8 +6,6 @@
 
 #include "listener.hpp"
 
-typedef packet_type_t message_type_t;
-
 class Client
 {
     private:
@@ -23,7 +21,7 @@ class Client
 
         error_t connect();
         error_t close();
-        error_t send(message_type_t type, std::string message);
+        error_t send(packet_type_t type, std::string message);
 };
 
 #endif

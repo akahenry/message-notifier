@@ -62,11 +62,13 @@ error_t Server::serve()
                     {
                         std::cout << "INFO: User `" << authResponse.username << "` has exceed its sessions limit" << std::endl;
                         std::cout << "INFO: Connection refused for user " << authResponse.username << std::endl;
+                        clientSession->close(ERROR_NOTIFICATION_UNAUTHORIZED);
+                        delete clientSession;
                     }
                     else
                     {
                         std::cout << "DEBUG: Adding session for `" << authResponse.username << "`" << std::endl;
-                        user->addSession(clientSession); // TODO: fix cant get lock to add session into user
+                        user->addSession(clientSession);
                         std::cout << "INFO: Connection accepted for user " << authResponse.username << std::endl;
                         clientSession->listen();
                     }

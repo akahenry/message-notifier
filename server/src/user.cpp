@@ -65,6 +65,8 @@ bool User::removeSession(Session* session)
 int User::countSessions()
 {
     this->mutex.lock();
-    return this->sessions.size();
+    int size = this->sessions.size();
     this->mutex.unlock();
+
+    return size;
 }

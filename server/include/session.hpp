@@ -26,6 +26,7 @@ class Session
 
         error_t send(message_type_t type, void* message);
         error_t listen();
+        error_t close(error_notification_t _error);
 };
 
 #endif
