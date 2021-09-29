@@ -1,6 +1,10 @@
+#ifndef MODELS_HPP
+#define MODELS_HPP
+
 #include <string>
 
 #define PACKET_PAYLOAD_MAX_LENGTH 512
+#define PACKET_USERNAME_MAX_LENGTH 512
 
 typedef uint16_t message_type_t;
 #define MESSAGE_TYPE_PACKET 0
@@ -15,7 +19,8 @@ typedef struct __packet{
     packet_type_t type;        //Tipo do pacote (p.ex. DATA | CMD) 
     uint16_t seqn;        //Número de sequência 
     uint16_t length;       //Comprimento do payload  
-    uint16_t timestamp;     // Timestamp do dado 
+    uint16_t timestamp;     //Timestamp do dado
+    char _username[PACKET_USERNAME_MAX_LENGTH]; //Nome do usuário
     char _payload[PACKET_PAYLOAD_MAX_LENGTH];    //Dados da mensagem 
 } packet;
 
@@ -33,3 +38,5 @@ typedef struct __notification{
     std::string _string;     //Mensagem 
     std::string _user;      //Nome do usuário que enviou a mensagem
 } notification; 
+
+#endif

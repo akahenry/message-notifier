@@ -19,6 +19,11 @@ error_t Client::connect()
         return ERROR_CONNECTION_SOCKET_FAILED;
     }
 
+    if (this->socket.send(PACKET_TYPE_CONNECT, this->username, ""))
+    {
+        return ERROR_CONNECTION_SOCKET_FAILED;
+    }
+
     this->listener = Listener(this->socket);
 
     return this->listener.start();
@@ -26,7 +31,7 @@ error_t Client::connect()
 
 error_t Client::send(message_type_t type, std::string message)
 {
-    return this->socket.send((packet_type_t)type, message);
+    return this->socket.send((packet_type_t)type, this->username, message);
 }
 
 error_t Client::close()

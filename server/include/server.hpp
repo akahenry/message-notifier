@@ -1,8 +1,12 @@
+#ifndef SERVER_HPP
+#define SERVER_HPP
+
 #include <map>
 #include <string>
 #include <mutex>
 
 #include "user.hpp"
+#include "authenticator.hpp"
 
 class Server
 {
@@ -22,3 +26,5 @@ class Server
         error_t listen(std::string port);
         error_t serve();
 };
+
+#endif

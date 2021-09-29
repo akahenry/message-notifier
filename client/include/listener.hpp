@@ -1,3 +1,6 @@
+#ifndef LISTENER_HPP
+#define LISTENER_HPP
+
 #include <thread>
 #include <functional>
 
@@ -19,3 +22,5 @@ class Listener
         error_t start();
         error_t stop();
 };
+
+#endif

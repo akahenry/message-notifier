@@ -1,3 +1,6 @@
+#ifndef SOCKET_HPP
+#define SOCKET_HPP
+
 #include <iostream>
 #include <string>
 #include <stdio.h>
@@ -34,10 +37,12 @@ class Socket
         const int getSocket();
         error_t configure(socket_type_t type);
         error_t finish();
-        error_t send(packet_type_t packet, std::string message);
+        error_t send(packet_type_t packet, std::string username, std::string message);
         error_t send(packet pkt);
         error_t send(notification notif);
         error_t receive(notification* _notification);
         error_t receive(packet* pkt);
         error_t serve(Socket *socket);
 };
+
+#endif

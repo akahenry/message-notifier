@@ -48,7 +48,47 @@ error_t Server::serve()
         {
             std::cout << "DEBUG: Client connected succesfully" << std::endl;
             Session* clientSession = new Session(clientSocketPtr);
-            clientSession->listen();
+            Authenticator auth = Authenticator(clientSocketPtr);
+            auth_t authResponse = auth.authenticate();
+            if(authResponse.isValid)
+            {
+                this->users_mutex.lock();
+                std::cout << "DEBUG: Checking for user" << std::endl;
+                User* user;
+                if (this->users.find(authResponse.username) != this->users.end())
+                {
+                    user = this->users.at(authResponse.username);
+                    if (user->countSessions() >= 2)
+                    {
+                        std::cout << "INFO: User `" << authResponse.username << "` has exceed its sessions limit" << std::endl;
+                        std::cout << "INFO: Connection refused for user " << authResponse.username << std::endl;
+                    }
+                    else
+                    {
+                        std::cout << "DEBUG: Adding session for `" << authResponse.username << "`" << std::endl;
+                        user->addSession(clientSession); // TODO: fix cant get lock to add session into user
+                        std::cout << "INFO: Connection accepted for user " << authResponse.username << std::endl;
+                        clientSession->listen();
+                    }
+                }
+                else
+                {
+                    std::cout << "DEBUG: User `" << authResponse.username << "` not found" << std::endl;
+                    user = new User(authResponse.username);
+
+                    std::cout << "DEBUG: Adding session for `" << authResponse.username << "`" << std::endl;
+                    user->addSession(clientSession);
+    
+                    this->users.insert({user->getName(), user});
+                    std::cout << "INFO: Connection accepted for user " << authResponse.username << std::endl;
+                    clientSession->listen();
+                }
+                this->users_mutex.unlock();
+            }
+            else
+            {
+                delete clientSession;
+            }
         }
     }
 

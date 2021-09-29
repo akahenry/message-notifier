@@ -36,9 +36,11 @@ void User::unlock()
 
 void User::addSession(Session* session)
 {
+    std::cout << "DEBUG: Trying to lock user" << std::endl;
     this->mutex.lock();
     this->sessions.push_back(session);
     this->mutex.unlock();
+    std::cout << "DEBUG: Trying to unlock user" << std::endl;
 }
 
 bool User::removeSession(Session* session)

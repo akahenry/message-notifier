@@ -62,6 +62,8 @@ error_t Socket::configureClient()
 
     this->sockaddr = address;
 
+
+
     return 0;
 }
 
@@ -94,12 +96,13 @@ error_t Socket::finish()
     return close(this->sockfd);
 }
 
-error_t Socket::send(packet_type_t type, std::string message)
+error_t Socket::send(packet_type_t type, std::string username, std::string message)
 {
     packet pkt;
     pkt.type = type;
     pkt.length = PACKET_PAYLOAD_MAX_LENGTH;
     strcpy(pkt._payload, message.c_str());
+    strcpy(pkt._username, username.c_str());
     pkt.timestamp = 0;
 
     return this->send(pkt);

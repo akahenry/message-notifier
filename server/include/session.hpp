@@ -1,3 +1,6 @@
+#ifndef SESSION_HPP
+#define SESSION_HPP
+
 #include <thread>
 #include <functional>
 
@@ -24,3 +27,5 @@ class Session
         error_t send(message_type_t type, void* message);
         error_t listen();
 };
+
+#endif

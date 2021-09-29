@@ -36,6 +36,7 @@ error_t Session::sendNotification(notification notif)
 error_t Session::listen()
 {
     this->running = true;
+    std::cout << "DEBUG: Starting session thread" << std::endl;
     this->thread = std::thread(&Session::run, this);
 
     return 0;
@@ -57,11 +58,11 @@ error_t Session::run()
 
         if (pkt.type == PACKET_TYPE_DATA)
         {
-            std::cout << "DATA: " << pkt._payload << std::endl;
+            std::cout << "INFO: Data `" << pkt._payload << "` received from user `" <<  pkt._username << "`" << std::endl;
         }
         else if (pkt.type == PACKET_TYPE_CMD)
         {
-            std::cout << "CMD: " << pkt._payload << std::endl;
+            std::cout << "INFO: Command `" << pkt._payload << "` received from user `" <<  pkt._username << "`" << std::endl;
         }
     }
 

@@ -1,3 +1,6 @@
+#ifndef USER_HPP
+#define USER_HPP
+
 #include <iostream>
 #include <string>
 
@@ -23,3 +26,4 @@ class Client
         error_t send(message_type_t type, std::string message);
 };
 
+#endif

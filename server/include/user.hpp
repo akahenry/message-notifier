@@ -1,6 +1,10 @@
+#ifndef USER_HPP
+#define USER_HPP
+
 #include <string>
 #include <vector>
 #include <mutex>
+#include <iostream>
 
 #include "session.hpp"
 
@@ -29,3 +33,5 @@ class User
         bool removeSession(Session* session);
         int countSessions();
 };
+
+#endif
