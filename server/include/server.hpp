@@ -14,7 +14,7 @@ class Server
     private:
         server_attr server;
         Socket socket;
-        Queue* queue;
+        Queue<packet_item>* queue;
         PacketHandler* pkt_handler;
         bool running;
 

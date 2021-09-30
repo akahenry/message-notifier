@@ -2,7 +2,7 @@
 
 Server::Server(std::vector<User*> _users, std::string port)
 {
-    this->queue = new Queue();
+    this->queue = new Queue<packet_item>();
     this->pkt_handler = new PacketHandler(this->queue);
 
     for (size_t i = 0; i < _users.size(); i++)
@@ -15,7 +15,7 @@ Server::Server(std::vector<User*> _users, std::string port)
 
 Server::Server(std::vector<User*> _users)
 {
-    this->queue = new Queue();
+    this->queue = new Queue<packet_item>();
     this->pkt_handler = new PacketHandler(this->queue);
 
     for (size_t i = 0; i < _users.size(); i++)

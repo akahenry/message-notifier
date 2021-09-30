@@ -1,11 +1,11 @@
 #include "session.hpp"
 
-Session::Session(Socket _socket, Queue* _queue)
+Session::Session(Socket _socket, Queue<packet_item>* _queue)
 {
     *this = Session(-1, _socket, _queue);
 }
 
-Session::Session(int _id, Socket _socket, Queue* _queue) : id{_id}, socket{_socket}, running{false}, queue(_queue) {}
+Session::Session(int _id, Socket _socket, Queue<packet_item>* _queue) : id{_id}, socket{_socket}, running{false}, queue(_queue) {}
 
 error_t Session::send(message_type_t type, void* message)
 {

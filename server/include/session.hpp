@@ -13,7 +13,7 @@ class Session
         Socket socket;
         std::thread thread;
         bool running;
-        Queue* queue;
+        Queue<packet_item>* queue;
 
         error_t sendPacket(packet pkt);
         error_t sendNotification(notification notif);
@@ -23,8 +23,8 @@ class Session
         int id;
 
         Session();
-        Session(Socket _socket, Queue* _queue);
-        Session(int _id, Socket _socket, Queue* _queue);
+        Session(Socket _socket, Queue<packet_item>* _queue);
+        Session(int _id, Socket _socket, Queue<packet_item>* _queue);
 
         error_t send(message_type_t type, void* message);
         error_t listen();

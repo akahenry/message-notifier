@@ -37,3 +37,7 @@
 # Binaries
 bin/*
 !bin/.gitkeep
+
+# Server data
+server/data/*
+!server/data/.gitkeep

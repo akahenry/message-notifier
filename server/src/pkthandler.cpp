@@ -1,6 +1,6 @@
 #include "pkthandler.hpp"
 
-PacketHandler::PacketHandler(Queue* queue) : queue(queue) {}
+PacketHandler::PacketHandler(Queue<packet_item>* queue) : queue(queue) {}
 
 void PacketHandler::handle()
 {
@@ -25,12 +25,12 @@ void PacketHandler::run()
             if (pkt.type == PACKET_TYPE_CMD_SEND)
             {
                 std::cout << "INFO: Data `" << pkt._payload << "` received from user `" <<  pkt._username << "`" << std::endl;
-                this->handleMessage(item.session_id, pkt);
+                this->handleMessage(pkt);
             }
             else if (pkt.type == PACKET_TYPE_CMD_FOLLOW)
             {
                 std::cout << "INFO: Follow `" << pkt._payload << "` received from user `" <<  pkt._username << "`" << std::endl;
-                this->handleFollow(item.session_id, pkt);
+                this->handleFollow(pkt);
             }
             else if (pkt.type == PACKET_TYPE_CMD_EXIT)
             {
@@ -41,7 +41,7 @@ void PacketHandler::run()
     }
 }
 
-void PacketHandler::handleMessage(uint16_t session_id, packet pkt)
+void PacketHandler::handleMessage(packet pkt)
 {
     User* user = this->getUser(pkt._username);
     std::vector<User*> followers = user->getFollowers();
@@ -60,7 +60,7 @@ void PacketHandler::handleMessage(uint16_t session_id, packet pkt)
     }
 }
 
-void PacketHandler::handleFollow(uint16_t session_id, packet pkt)
+void PacketHandler::handleFollow(packet pkt)
 {
     User* follower = this->getUser(pkt._username);
     User* followed = this->getUser(pkt._payload);

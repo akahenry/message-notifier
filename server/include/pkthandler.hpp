@@ -12,17 +12,17 @@ class PacketHandler
     private:
         std::map<std::string, User*> users;
         std::mutex users_mutex;
-        Queue* queue;
+        Queue<packet_item>* queue;
         std::thread thread;
         bool running;
 
         void run();
-        void handleMessage(uint16_t session_id, packet pkt);
-        void handleFollow(uint16_t session_id, packet pkt);
+        void handleMessage(packet pkt);
+        void handleFollow(packet pkt);
         void handleExit(uint16_t session_id, packet pkt);
     public:
         PacketHandler();
-        PacketHandler(Queue* queue);
+        PacketHandler(Queue<packet_item>* queue);
         
         void handle();
         void close();
