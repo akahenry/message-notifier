@@ -98,12 +98,13 @@ error_t Socket::finish()
 
 error_t Socket::send(packet_type_t type, std::string username, std::string message)
 {
+    const auto p1 = std::chrono::system_clock::now();
     packet pkt;
     pkt.type = type;
     pkt.length = PACKET_PAYLOAD_MAX_LENGTH;
     strcpy(pkt._payload, message.c_str());
     strcpy(pkt._username, username.c_str());
-    pkt.timestamp = 0;
+    pkt.timestamp = std::chrono::duration_cast<std::chrono::seconds>(p1.time_since_epoch()).count();
 
     return this->send(pkt);
 }

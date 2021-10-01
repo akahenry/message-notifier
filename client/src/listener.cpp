@@ -18,7 +18,7 @@ error_t Listener::run()
         {
             case ERROR_NOTIFICATION_NONE:
                 std::cout << "\n----------------------------------\n";
-                std::cout << notif._user << ": " << notif._string << std::endl;
+                std::cout << notif.timestamp << " " << notif._user << ": " << notif._string << std::endl;
                 std::cout << "----------------------------------\n";
 
                 std::cout << "> ";
@@ -26,12 +26,12 @@ error_t Listener::run()
                 break;
             case ERROR_NOTIFICATION_UNAUTHORIZED:
                 std::cout << "User has exceed limit of concurrent sessions" << std::endl;
-                return 0;
+                exit(2);
                 break;
             
             case ERROR_NOTIFICATION_SERVER_CLOSED:
                 std::cout << "Server has closed. Closing client..." << std::endl;
-                return 0;
+                exit(1);
                 break;
         }
     }

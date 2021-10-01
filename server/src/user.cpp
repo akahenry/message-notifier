@@ -2,7 +2,7 @@
 
 User::User(std::string _name) : name{_name} {}
 
-User::User(std::string _name, std::vector<User*> _following, std::vector<User*> _followers) : name{_name}, following{_following}, followers{_followers} {}
+User::User(std::string _name, std::vector<User*> _following, std::vector<User*> _followers, Queue<notification> _pending) : name{_name}, following{_following}, followers{_followers}, pending{_pending} {}
 
 void User::addFollower(User* user) 
 {
@@ -54,6 +54,16 @@ std::vector<User*> User::getFollowers()
     return this->followers;
 }
 
+std::vector<User*> User::getFollowing()
+{
+    return this->following;
+}
+
+std::vector<notification> User::getPending()
+{
+    return this->pending.data();
+}
+
 void User::lock()
 {
     this->mutex.lock();
@@ -72,6 +82,7 @@ void User::addSession(Session* session)
     this->sessions.push_back(session);
     this->mutex.unlock();
     std::cout << "DEBUG: Trying to unlock user" << std::endl;
+    this->publish();
 }
 
 void User::removeSession(Session* session)
@@ -102,4 +113,26 @@ int User::countSessions()
     this->mutex.unlock();
 
     return size;
+}
+
+void User::pushNotification(notification notif)
+{
+    this->pending.push(notif);
+    this->publish();
+}
+
+void User::publish()
+{
+    notification notif;
+    if (this->sessions.size() > 0)
+    {
+        while (!this->pending.empty())
+        {
+            notif = this->pending.pop();
+            for (size_t i = 0; i < this->sessions.size(); i++)
+            {
+                this->sessions[i]->send(MESSAGE_TYPE_NOTIFICATION, (void*)&notif);
+            }
+        }
+    }
 }

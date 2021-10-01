@@ -25,7 +25,7 @@ typedef struct __packet{
     packet_type_t type;        //Tipo do pacote (p.ex. DATA | CMD) 
     uint16_t seqn;        //Número de sequência 
     uint16_t length;       //Comprimento do payload  
-    uint16_t timestamp;     //Timestamp do dado
+    int64_t timestamp;     //Timestamp do dado
     char _username[PACKET_USERNAME_MAX_LENGTH]; //Nome do usuário
     char _payload[PACKET_PAYLOAD_MAX_LENGTH];    //Dados da mensagem 
 } packet;
@@ -41,11 +41,12 @@ typedef enum __error_notification_t
     ERROR_NOTIFICATION_NONE,
     ERROR_NOTIFICATION_UNAUTHORIZED,
     ERROR_NOTIFICATION_SERVER_CLOSED,
+    ERROR_NOTIFICATION_SERVER_WILL_CLOSE,
 } error_notification_t;
 
 typedef struct __notification{ 
     uint32_t id;         //Identificador da notificação (sugere-se um identificador único) 
-    uint32_t timestamp;     //Timestamp da notificação 
+    int64_t timestamp;     //Timestamp da notificação 
     uint16_t length;       //Tamanho da mensagem 
     uint16_t pending;      //Quantidade de leitores pendentes 
     char _string[PACKET_PAYLOAD_MAX_LENGTH];     //Mensagem 

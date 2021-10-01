@@ -3,6 +3,7 @@
 
 #include <map>
 #include <thread>
+#include <fstream>
 
 #include "user.hpp"
 #include "queue.hpp"
@@ -30,6 +31,7 @@ class PacketHandler
         bool hasUser(User* user);
         bool hasUser(std::string username);
         User* getUser(std::string username);
+        void save(std::string path);
 };
 
 #endif

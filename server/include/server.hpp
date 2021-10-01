@@ -27,6 +27,8 @@ class Server
         error_t listen();
         error_t listen(std::string port);
         error_t serve();
+        error_t close();
+        error_t save(std::string path);
 };
 
 #endif

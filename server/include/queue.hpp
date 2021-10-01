@@ -12,13 +12,24 @@ class Queue
     private:
         std::mutex mutex;
         std::vector<T> queue;
+        bool locked;
 
     public:
+        Queue() = default;
+        Queue<T>(const Queue<T> &q)
+        {
+            this->locked = false;
+            this->queue = q.queue;
+        }
+
         void push(T item)
         {
-            this->mutex.lock();
-            this->queue.push_back(item);
-            this->mutex.unlock();
+            if (!this->locked)
+            {
+                this->mutex.lock();
+                this->queue.push_back(item);
+                this->mutex.unlock();
+            }
         }
 
         T pop()
@@ -39,6 +50,27 @@ class Queue
             bool response = this->queue.size() == 0;
             this->mutex.unlock();
             return response;
+        }
+
+        void lock()
+        {
+            this->locked = true;
+        }
+
+        void unlock()
+        {
+            this->locked = false;
+        }
+
+        std::vector<T> data()
+        {
+            return this->queue;
+        }
+
+        void operator=(const Queue &q) 
+        { 
+            this->queue = q.queue;
+            this->locked = q.locked;
         }
 };
 

@@ -7,7 +7,7 @@
 Client *client;
 
 void signalHandler(int signum) {
-    std::cout << "DEBUG: Interrupt signal (" << signum << ") received. Exiting...\n";
+    std::cout << "\nDEBUG: Interrupt signal (" << signum << ") received. Exiting...\n";
 
     client->send(PACKET_TYPE_CMD_EXIT, "");
     client->close();

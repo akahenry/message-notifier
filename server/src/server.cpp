@@ -127,3 +127,17 @@ auth_t Server::auth(Socket socket)
         }
     }
 }
+
+error_t Server::close()
+{
+    this->pkt_handler->close();
+
+    return 0;
+}
+
+error_t Server::save(std::string path)
+{
+    this->pkt_handler->save(path);
+
+    return 0;
+}
