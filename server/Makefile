@@ -15,6 +15,7 @@ DEBUG_EXECUTABLE := server.debug
 
 
 all: $(BIN)/$(EXECUTABLE)
+	-mkdir data
 
 run: clean all
 	clear
