@@ -53,10 +53,17 @@ int main(int argc, char **argv)
         return ERROR_CONFIGURATION_FAILED;
     }
 
-    while (true) 
+    std::string input;
+    while (std::getline(std::cin, input)) 
     {
-        std::string input;
-        std::getline(std::cin, input);
+        if (std::cin.eof())
+        {
+            std::cout << "DEBUG: Exiting from client..." << std::endl;
+            client->send(PACKET_TYPE_CMD_EXIT, "");
+            client->close();
+            break;
+        }
+        std::cout << "> ";
         std::cout << "DEBUG: Input `" << input << "` from user" << std::endl;
         if (input.rfind("FOLLOW @", 0) == 0)
         {
