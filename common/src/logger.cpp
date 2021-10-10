@@ -1,6 +1,6 @@
 #include "logger.hpp"
 
-log_type_t log_level = LOG_TYPE_DEBUG;
+log_type_t log_level = LOG_TYPE_INFO;
 
 void log(log_type_t type, std::string message)
 {

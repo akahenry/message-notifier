@@ -12,7 +12,7 @@ Message-notifier is a terminal based application for messages like Twitter. It w
 
 1. Clone the repository
 ```
-$ git clone  git@github.com/akahenry/message-notifier
+$ git clone git@github.com:akahenry/message-notifier
 ```
 2. Compile the applications with make
 ```
