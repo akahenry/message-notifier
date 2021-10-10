@@ -5,6 +5,7 @@
 #include <functional>
 
 #include "socket.hpp"
+#include "logger.hpp"
 
 class Listener
 {

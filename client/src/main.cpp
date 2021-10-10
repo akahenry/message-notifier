@@ -3,11 +3,12 @@
 
 #include "client.hpp"
 #include "error.hpp"
+#include "logger.hpp"
 
 Client *client;
 
 void signalHandler(int signum) {
-    std::cout << "\nDEBUG: Interrupt signal (" << signum << ") received. Exiting...\n";
+    log(LOG_TYPE_DEBUG, "Interrupt signal (" + std::to_string(signum) + ") received. Exiting...");
 
     client->send(PACKET_TYPE_CMD_EXIT, "");
     client->close();
@@ -19,7 +20,7 @@ int main(int argc, char **argv)
 {
     if (argc < 3)
     {
-        std::cout << "Missing args. You must specify the username, the server address and its port (respectively).";
+        log(LOG_TYPE_INFO, "Missing args. You must specify the username, the server address and its port (respectively).");
         return ERROR_MISSING_ARGS;
     }
     else
@@ -49,7 +50,7 @@ int main(int argc, char **argv)
 
     if (client->connect())
     {
-        std::cout << "Error configurating client. Exiting..." << std::endl;
+         log(LOG_TYPE_INFO, "Error configurating client. Exiting...");
         return ERROR_CONFIGURATION_FAILED;
     }
 
@@ -58,26 +59,27 @@ int main(int argc, char **argv)
     {
         if (std::cin.eof())
         {
-            std::cout << "DEBUG: Exiting from client..." << std::endl;
+            log(LOG_TYPE_DEBUG,  "Exiting from client...");
             client->send(PACKET_TYPE_CMD_EXIT, "");
             client->close();
             break;
         }
         std::cout << "> ";
-        std::cout << "DEBUG: Input `" << input << "` from user" << std::endl;
+
+        log(LOG_TYPE_DEBUG,  "Input `" + input + "` from user");
         if (input.rfind("FOLLOW @", 0) == 0)
         {
-            std::cout << "DEBUG: Sending follow `" << &input[8] << "` to client" << std::endl;
+            log(LOG_TYPE_DEBUG,  "Sending follow `" + std::string(&input[8]) + "` to client");
             client->send(PACKET_TYPE_CMD_FOLLOW, &input[8]);
         }
         else if (input.rfind("SEND ", 0) == 0)
         {
-            std::cout << "DEBUG: Sending message `" << &input[5] << "` to client" << std::endl;
+            log(LOG_TYPE_DEBUG,  "Sending message `" + std::string(&input[5]) + "` to client");
             client->send(PACKET_TYPE_CMD_SEND, &input[5]);
         }
         else if (input.rfind("EXIT", 0) == 0)
         {
-            std::cout << "DEBUG: Exiting from client..." << std::endl;
+            log(LOG_TYPE_DEBUG,  "Exiting from client...");
             client->send(PACKET_TYPE_CMD_EXIT, "");
             client->close();
             break;

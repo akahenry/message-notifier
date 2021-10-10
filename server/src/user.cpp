@@ -76,12 +76,12 @@ void User::unlock()
 
 void User::addSession(Session* session)
 {
-    std::cout << "DEBUG: Trying to lock user" << std::endl;
+    log(LOG_TYPE_DEBUG,  "Trying to lock user");
     this->mutex.lock();
     session->id = this->sessions.size();
     this->sessions.push_back(session);
     this->mutex.unlock();
-    std::cout << "DEBUG: Trying to unlock user" << std::endl;
+    log(LOG_TYPE_DEBUG,  "Trying to unlock user");
     this->publish();
 }
 

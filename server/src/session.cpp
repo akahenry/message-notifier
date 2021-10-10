@@ -36,7 +36,7 @@ error_t Session::sendNotification(notification notif)
 error_t Session::listen()
 {
     this->running = true;
-    std::cout << "DEBUG: Starting session thread" << std::endl;
+    log(LOG_TYPE_DEBUG,  "Starting session thread");
     this->thread = std::thread(&Session::run, this);
 
     return 0;
@@ -46,7 +46,7 @@ error_t Session::run()
 {
     packet pkt;
 
-    std::cout << "DEBUG: Running session thread" << std::endl;
+    log(LOG_TYPE_DEBUG,  "Running session thread");
 
     while(this->running)
     {

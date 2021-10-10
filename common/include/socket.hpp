@@ -16,6 +16,7 @@
 
 #include "error.hpp"
 #include "models.hpp"
+#include "logger.hpp"
 
 typedef int socket_type_t;
 #define SOCKET_TYPE_CLIENT 0

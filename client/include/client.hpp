@@ -5,6 +5,7 @@
 #include <string>
 
 #include "listener.hpp"
+#include "logger.hpp"
 
 class Client
 {

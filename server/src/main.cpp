@@ -57,12 +57,8 @@ std::vector<User*> loadUsers(std::string path)
         std::vector<std::string> followers;
         std::vector<notification> notifications;
 
-        std::cout << entry.path() << std::endl;
-
-        std::cout << entry.path().filename() << std::endl;
-
         strcpy(username, entry.path().filename().c_str());
-        std::cout << "DEBUG: Reading user `" << username << "`" << std::endl; 
+        log(LOG_TYPE_DEBUG,  "Reading user `" + std::string(username) + "`"); 
         if (map.find(username) == map.end())
         {
             user = new User(username);
@@ -83,7 +79,7 @@ std::vector<User*> loadUsers(std::string path)
             file.read((char*)&name_size, sizeof(size_t));
             file.read((char*)follower_name, name_size);
 
-            std::cout << "DEBUG: Reading follower `" << follower_name << "` for user `" << username << "`" << std::endl; 
+            log(LOG_TYPE_DEBUG,  "Reading follower `" + std::string(follower_name) + "` for user `" + std::string(username) + "`"); 
 
             if (map.find(follower_name) == map.end())
             {
@@ -121,7 +117,7 @@ std::vector<User*> loadUsers(std::string path)
 
 void saveUsers(int signum)
 {
-    std::cout << "\nDEBUG: Interrupt signal (" << signum << ") received. Exiting...\n";
+    log(LOG_TYPE_DEBUG, "Interrupt signal (" + std::to_string(signum) + ") received. Exiting...");
 
     server->close();
     

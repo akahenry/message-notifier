@@ -11,7 +11,7 @@ void PacketHandler::handle()
 void PacketHandler::close()
 {  
     // Notify close
-    std::cout << "DEBUG: Trying to lock users_mutex" << std::endl;
+    log(LOG_TYPE_DEBUG,  "Trying to lock users_mutex");
     this->users_mutex.lock();
     for (auto it = this->users.begin(); it != this->users.end(); it++)
     {
@@ -24,22 +24,22 @@ void PacketHandler::close()
         }
     }
     this->users_mutex.unlock();
-    std::cout << "DEBUG: Unlocking users_mutex" << std::endl;
+    log(LOG_TYPE_DEBUG,  "Unlocking users_mutex");
     
     // Stop pushing messages into the queue
-    std::cout << "DEBUG: Trying to lock queue" << std::endl;
+    log(LOG_TYPE_DEBUG,  "Trying to lock queue");
     this->queue->lock();
-    std::cout << "DEBUG: Checking if the queue is empty" << std::endl;
+    log(LOG_TYPE_DEBUG,  "Checking if the queue is empty");
     while(!this->queue->empty());
-    std::cout << "DEBUG: Queue is empty" << std::endl;
+    log(LOG_TYPE_DEBUG,  "Queue is empty");
     this->running = false;
-    std::cout << "DEBUG: Setting running to false" << std::endl;
-    std::cout << "DEBUG: Trying to join thread" << std::endl;
+    log(LOG_TYPE_DEBUG,  "Setting running to false");
+    log(LOG_TYPE_DEBUG,  "Trying to join thread");
     this->thread.join();
-    std::cout << "DEBUG: After join thread" << std::endl;
+    log(LOG_TYPE_DEBUG,  "After join thread");
 
     // Close sessions
-    std::cout << "DEBUG: Trying to lock users_mutex" << std::endl;
+    log(LOG_TYPE_DEBUG,  "Trying to lock users_mutex");
     this->users_mutex.lock();
     for (auto it = this->users.begin(); it != this->users.end(); it++)
     {
@@ -50,7 +50,7 @@ void PacketHandler::close()
         }
     }
     this->users_mutex.unlock();
-    std::cout << "DEBUG: Unlocking users_mutex" << std::endl;
+    log(LOG_TYPE_DEBUG,  "Unlocking users_mutex");
 }
 
 void PacketHandler::run()
@@ -64,17 +64,17 @@ void PacketHandler::run()
 
             if (pkt.type == PACKET_TYPE_CMD_SEND)
             {
-                std::cout << "INFO: Data `" << pkt._payload << "` received from user `" <<  pkt._username << "`" << std::endl;
+                log(LOG_TYPE_INFO,  "Data `" + std::string(pkt._payload) + "` received from user `" +  std::string(pkt._username) + "`");
                 this->handleMessage(pkt);
             }
             else if (pkt.type == PACKET_TYPE_CMD_FOLLOW)
             {
-                std::cout << "INFO: Follow `" << pkt._payload << "` received from user `" <<  pkt._username << "`" << std::endl;
+                log(LOG_TYPE_INFO,  "Follow `" + std::string(pkt._payload) + "` received from user `" + std::string(pkt._username) + "`");
                 this->handleFollow(pkt);
             }
             else if (pkt.type == PACKET_TYPE_CMD_EXIT)
             {
-                std::cout << "INFO: Exit received from user `" <<  pkt._username << "`" << std::endl;
+                log(LOG_TYPE_INFO,  "Exit received from user `" + std::string(pkt._username) + "`");
                 this->handleExit(item.session_id, pkt);
             }
         }
@@ -167,7 +167,7 @@ void PacketHandler::save(std::string path)
         file.open(_path.append(it->first), std::ios::binary | std::ios::out);
         if(file)
         {
-            std::cout << "DEBUG:: Saving user `" << it->first << "`" << std::endl; 
+            log(LOG_TYPE_DEBUG, "Saving user `" + it->first + "`"); 
             std::vector<std::string> followers;
             std::vector<notification> notifications = it->second->getPending();
             for (auto user : it->second->getFollowers())
@@ -179,7 +179,7 @@ void PacketHandler::save(std::string path)
             file.write((char*)&followers_size, sizeof(size_t));
             for (size_t i = 0; i < followers_size; i++)
             {
-                std::cout << "DEBUG: Saving follower `" << followers[i] << "` for user `" << it->first << "`" << std::endl; 
+                log(LOG_TYPE_DEBUG,  "Saving follower `" + followers[i] + "` for user `" + it->first + "`"); 
                 size_t name_size = followers[i].size();
                 file.write((char*)&name_size, sizeof(size_t));
                 file.write((char*)followers[i].c_str(), name_size);

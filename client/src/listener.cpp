@@ -25,12 +25,12 @@ error_t Listener::run()
                 fflush(stdout);
                 break;
             case ERROR_NOTIFICATION_UNAUTHORIZED:
-                std::cout << "User has exceed limit of concurrent sessions" << std::endl;
+                log(LOG_TYPE_INFO, "User has exceed limit of concurrent sessions");
                 exit(2);
                 break;
             
             case ERROR_NOTIFICATION_SERVER_CLOSED:
-                std::cout << "Server has closed. Closing client..." << std::endl;
+                log(LOG_TYPE_INFO, "Server has closed. Closing client...");
                 exit(1);
                 break;
         }

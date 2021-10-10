@@ -15,7 +15,7 @@ Socket::Socket(std::string _address, std::string _port)
 
     if (host == NULL) 
     {
-        std::cout << "Server address `" << _address << "` is not valid. Throwing an error..." << std::endl;
+        log(LOG_TYPE_INFO, "Server address `" + _address + "` is not valid. Throwing an error...");
         throw std::invalid_argument("Server address must be a valid value");
     }
     
@@ -51,7 +51,7 @@ error_t Socket::configureClient()
     struct sockaddr_in address = this->sockaddr;
     if ((this->sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1) 
     {
-        std::cout << "Error opening socket" << std::endl;
+        log(LOG_TYPE_INFO, "Error opening socket");
         return ERROR_OPEN_SOCKET;
     }
 	
@@ -72,7 +72,7 @@ error_t Socket::configureServer()
     struct sockaddr_in address = this->sockaddr;
     if ((this->sockfd = socket(AF_INET, SOCK_STREAM, 0)) == -1) 
     {
-        std::cout << "Error opening socket" << std::endl;
+        log(LOG_TYPE_INFO, "Error opening socket");
         return ERROR_OPEN_SOCKET;
     }
 	
