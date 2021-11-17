@@ -1,0 +1,32 @@
+CXX       := g++
+CXX_FLAGS := -std=c++17
+
+BIN     := ../bin
+SRC     := src
+INCLUDE := include
+
+COMMON_PATH := ../common
+COMMON_INCLUDE := $(COMMON_PATH)/include
+COMMON_SRC := $(COMMON_PATH)/src
+
+LIBRARIES   := -lpthread
+EXECUTABLE  := loadbalancer
+DEBUG_EXECUTABLE := loadbalancer.debug
+
+
+all: $(BIN)/$(EXECUTABLE)
+
+run: clean all
+	clear
+	./$(BIN)/$(EXECUTABLE)
+
+$(BIN)/$(EXECUTABLE): $(SRC)/*.cpp $(COMMON_SRC)/*.cpp
+	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -I$(COMMON_INCLUDE) $^ -o $@ $(LIBRARIES)
+
+debug: $(BIN)/$(DEBUG_EXECUTABLE)
+
+$(BIN)/$(DEBUG_EXECUTABLE): $(SRC)/*.cpp $(COMMON_SRC)/*.cpp
+	$(CXX) $(CXX_FLAGS) -g -I$(INCLUDE) -I$(COMMON_INCLUDE) $^ -o $@ $(LIBRARIES)
+
+clean:
+	-rm $(BIN)/*
