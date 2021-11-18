@@ -1,6 +1,6 @@
-#include "client.hpp"
+#include "../include/server.hpp"
 
-void Client::onStopListener()
+void Server::onStopListener()
 {
     this->listen_socket.finish();
 
@@ -10,7 +10,7 @@ void Client::onStopListener()
     }
 }
 
-void Client::onStopPublisher()
+void Server::onStopPublisher()
 {
     return;
 }

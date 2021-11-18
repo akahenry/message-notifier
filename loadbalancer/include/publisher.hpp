@@ -14,7 +14,7 @@ class Publisher
         Queue<T>* queue;
         std::vector<Socket> sockets;
         std::thread thread;
-        bool running = 0;
+        bool running;
 
     public:
         Publisher() = default;
@@ -39,7 +39,7 @@ class Publisher
         {
             while(this->running)
             {
-                if (!this->queue->empty)
+                if (!this->queue->empty())
                 {
                     T item = this->queue->pop();
                     for (size_t i = 0; i < this->sockets.size(); i++)
@@ -52,6 +52,10 @@ class Publisher
             return 0;
         }
 
+        void join()
+        {
+            this->thread.join();
+        }
 };
 
 #endif

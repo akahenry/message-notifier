@@ -13,12 +13,14 @@ class Listener
     protected:
         Socket socket;
         Queue<T>* queue;
+        bool (*analyze)(T, Listener<T>*);
         std::thread thread;
-        bool running = 0;
+        bool running;
 
     public:
         Listener() = default;
         Listener<T>(Socket _socket, Queue<T>* _queue) : socket{_socket}, queue{_queue} {}
+        Listener<T>(Socket _socket, Queue<T>* _queue, bool (*analyze)(T)) : socket{_socket}, queue{_queue}, analyze{analyze} {}
         
         error_t start()
         {
@@ -43,14 +45,22 @@ class Listener
             {
                 if (this->socket.receive(&item))
                 {
-                    this->running = false;
+                    this->stop();
                     return ERROR_RECEIVING_MESSAGE;
                 }
 
-                this->queue->push(item);
+                if (this->analyze == NULL || this->analyze(item, this))
+                {
+                    this->queue->push(item);
+                }
             }
 
             return 0;
+        }
+
+        void join()
+        {
+            this->thread.join();
         }
 };
 
