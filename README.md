@@ -12,7 +12,7 @@ Message-notifier is a terminal based application for messages like Twitter. It w
 
 1. Clone the repository
 ```
-$ git clone git@github.com:akahenry/message-notifier
+$ git clone git@github.com:akahenry/message-notifier.git
 ```
 2. Compile the applications with make
 ```
@@ -55,4 +55,11 @@ The server needs to know the port which it will listen for client connections. A
 
 ```
 $ ./bin/server 3000
+```
+
+### Loadbalancer
+The loadbalancer need to know the port which it will listen for client connections. Also, you must pass the server addresses in the parameters too.
+
+```
+$ ./bin/loadbalancer 4000 127.0.0.1:3000 127.0.0.1:3001
 ```
