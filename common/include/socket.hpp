@@ -45,6 +45,8 @@ class Socket
         error_t receive(notification* _notification);
         error_t receive(packet* pkt);
         error_t serve(Socket *socket);
+
+        bool operator==(const Socket& rhs);
 };
 
 #endif

@@ -1,19 +1,18 @@
 #ifndef MANAGER_HPP
 #define MANAGER_HPP
 
-#include <vector>
-
 #include "socket.hpp"
 #include "queue.hpp"
 #include "client.hpp"
 #include "server.hpp"
+#include "vector.hpp"
 
 class Manager
 {
     private:
         Socket socket;
-        std::vector<Client*> clients;
-        std::vector<Server*> servers;
+        Vector<Client*> clients;
+        Vector<Server*> servers;
         std::vector<server_attr> server_addresses;
         bool running;
 
@@ -25,6 +24,8 @@ class Manager
 
         error_t listen();
         error_t serve();
+
+        static void onStopServer(Socket server_socket, Vector<Server*>* servers, Vector<Client*>* clients);
 };
 
 #endif

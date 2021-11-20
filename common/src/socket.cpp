@@ -177,3 +177,8 @@ error_t Socket::serve(Socket *socket)
 
     return 0;
 }
+
+bool Socket::operator==(const Socket& rhs)
+{
+    return this->sockfd == rhs.sockfd;
+}

@@ -2,11 +2,13 @@
 
 void Client::onStopListener()
 {
-    this->listen_socket.finish();
+    Socket listen_socket = this->listener.getSocket();
+    std::vector<Socket> publish_sockets = this->publisher.getSockets();
 
-    for (size_t i = 0; i < this->publish_sockets.size(); i++)
+    listen_socket.finish();
+    for (size_t i = 0; i < publish_sockets.size(); i++)
     {
-        this->publish_sockets[i].finish();
+        publish_sockets[i].finish();
     }
 }
 

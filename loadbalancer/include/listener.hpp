@@ -13,7 +13,7 @@ class Listener
     protected:
         Socket socket;
         Queue<T>* queue;
-        bool (*analyze)(T, Listener<T>*);
+        bool (*analyze)(T) = NULL;
         std::thread thread;
         bool running;
 
@@ -49,9 +49,13 @@ class Listener
                     return ERROR_RECEIVING_MESSAGE;
                 }
 
-                if (this->analyze == NULL || this->analyze(item, this))
+                if (this->analyze == NULL || this->analyze(item))
                 {
                     this->queue->push(item);
+                }
+                else
+                {
+                    this->stop();
                 }
             }
 
@@ -61,6 +65,16 @@ class Listener
         void join()
         {
             this->thread.join();
+        }
+
+        const Socket getSocket()
+        {
+            return this->socket;
+        }
+
+        void setAnalyzeFunction(bool (*analyze)(T))
+        {
+            this->analyze = analyze;
         }
 };
 

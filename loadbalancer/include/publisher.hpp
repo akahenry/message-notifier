@@ -3,6 +3,7 @@
 
 #include <thread>
 #include <functional>
+#include <algorithm>
 
 #include "socket.hpp"
 #include "queue.hpp"
@@ -55,6 +56,42 @@ class Publisher
         void join()
         {
             this->thread.join();
+        }
+
+        void addSocket(Socket socket)
+        {
+            bool already = false;
+
+            for (size_t i = 0; i < this->sockets.size(); i++)
+            {
+                if (this->sockets[i] == socket)
+                {
+                    already = true;
+                    break;
+                }
+            }
+            
+            if (!already)
+            {
+                this->sockets.push_back(socket);
+            }
+        }
+
+        void removeSocket(Socket socket)
+        {
+            for (size_t i = 0; i < this->sockets.size(); i++)
+            {
+                if (this->sockets[i] == socket)
+                {
+                    this->sockets[i].finish();
+                    this->sockets.erase(this->sockets.begin() + i);
+                }
+            }
+        }
+
+        const std::vector<Socket> getSockets()
+        {
+            return this->sockets;
         }
 };
 

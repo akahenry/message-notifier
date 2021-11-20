@@ -1,6 +1,8 @@
 #ifndef USER_HPP
 #define USER_HPP
 
+#include <algorithm>
+
 #include "socket.hpp"
 #include "listener.hpp"
 #include "publisher.hpp"
@@ -22,12 +24,8 @@ class User
         }
 
     protected:
-        Socket listen_socket;
-        std::vector<Socket> publish_sockets;
         Listener<T> listener;
-        bool hasListener = false;
         Publisher<T> publisher;
-        bool hasPublisher = false;
         Queue<T> events;
         std::thread listener_thread;
         std::thread publisher_thread;
@@ -37,36 +35,28 @@ class User
 
     public:
         User() = default;
-        User(Socket listen_socket) : listen_socket{listen_socket}
+        User(Socket listen_socket)
         {
-            this->listener = Listener(this->listen_socket, &(this->events));
-            this->hasListener = true;
+            this->listener = Listener(listen_socket, &(this->events));
+            this->publisher = Publisher(std::vector<Socket>{}, &(this->events));
         }
-        User(std::vector<Socket> publish_sockets) : publish_sockets{publish_sockets}
+        User(std::vector<Socket> publish_sockets)
         {
-            this->publisher = Publisher(this->publish_sockets, &(this->events));
-            this->hasPublisher = true;
+            this->listener = Listener(std::vector<Socket>{}, &(this->events));
+            this->publisher = Publisher(publish_sockets, &(this->events));
         }
-        User(Socket listen_socket, std::vector<Socket> publish_sockets) : listen_socket{listen_socket}, publish_sockets{publish_sockets} 
+        User(Socket listen_socket, std::vector<Socket> publish_sockets)
         {
-            this->listener = Listener(this->listen_socket, &(this->events));
-            this->hasListener = true;
-            this->publisher = Publisher(this->publish_sockets, &(this->events));
-            this->hasPublisher = true;
+            this->listener = Listener(listen_socket, &(this->events));
+            this->publisher = Publisher(publish_sockets, &(this->events));
         }
 
         void start()
         {
-            if (this->hasListener)
-            {
-                this->listener.start();
-                this->listener_thread = std::thread(&User::stopListener, this);
-            }
-            if (this->hasPublisher)
-            {
-                this->publisher.start();
-                this->publisher_thread = std::thread(&User::stopPublisher, this);
-            }
+            this->listener.start();
+            this->listener_thread = std::thread(&User::stopListener, this);
+            this->publisher.start();
+            this->publisher_thread = std::thread(&User::stopPublisher, this);
         }
 
         void stop()
@@ -78,6 +68,26 @@ class User
         bool isRunning()
         {
             return this->listener.running && this->publisher.running;
+        }
+
+        void removePublishSocket(Socket socket)
+        {
+            this->publisher.removeSocket(socket);
+        }
+
+        const std::vector<Socket> getPublishSockets()
+        {
+            return this->publisher.getSockets();
+        }
+
+        void addPublishSocket(Socket socket)
+        {
+            this->publisher.addSocket(socket);
+        }
+
+        Socket getListenSocket()
+        {
+            return this->listener.getSocket();
         }
 };
 
